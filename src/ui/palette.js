@@ -63,6 +63,14 @@
       results.innerHTML = '<div class="palette-empty">No matches.</div>';
       return;
     }
+    // cluster by kind, keeping kinds in order of best hit
+    var kindOrder = [];
+    list.forEach(function (item) {
+      if (kindOrder.indexOf(item.kind) === -1) kindOrder.push(item.kind);
+    });
+    list = kindOrder.reduce(function (acc, k) {
+      return acc.concat(list.filter(function (it) { return it.kind === k; }));
+    }, []);
     var html = "";
     var lastKind = null;
     list.forEach(function (item, i) {

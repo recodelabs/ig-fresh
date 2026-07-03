@@ -53,7 +53,7 @@ export function renderInstance(a: Artifact, ctx: RenderCtx): VNode {
 
       {ctx.jsonHtml ? (
         <Card title="Resource content">
-          <div class="json-view" dangerouslySetInnerHTML={{ __html: ctx.jsonHtml }} />
+          <div class="json-view" data-pagefind-ignore dangerouslySetInnerHTML={{ __html: ctx.jsonHtml }} />
           <p style="margin:10px 0 0;font-size:12px;color:var(--ink-faint)">
             Raw renditions: <a href={`${a.resourceType}-${a.id}.json`}>JSON</a> ·{" "}
             <a href={`${a.resourceType}-${a.id}.xml`}>XML</a> ·{" "}

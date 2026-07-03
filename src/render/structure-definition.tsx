@@ -29,7 +29,7 @@ function TypeCell({ node, links }: { node: ElementNode; links: LinkResolver }) {
               <span class="opacity-70">
                 (
                 {targets.map((p, j) => {
-                  const name = p.split("/").pop();
+                  const name = p.split("/").pop()?.split("|")[0];
                   const h = links.hrefFor(p);
                   return (
                     <>
@@ -232,7 +232,7 @@ export function renderStructureDefinition(a: Artifact, ctx: RenderCtx): VNode {
 
       {ctx.jsonHtml ? (
         <Card title="JSON definition">
-          <div class="json-view" dangerouslySetInnerHTML={{ __html: ctx.jsonHtml }} />
+          <div class="json-view" data-pagefind-ignore dangerouslySetInnerHTML={{ __html: ctx.jsonHtml }} />
           <p style="margin:10px 0 0;font-size:12px;color:var(--ink-faint)">
             Raw renditions: <a href={`${a.resourceType}-${a.id}.json`}>JSON</a> ·{" "}
             <a href={`${a.resourceType}-${a.id}.xml`}>XML</a> ·{" "}

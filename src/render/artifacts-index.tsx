@@ -10,7 +10,7 @@ export function renderArtifactsIndex(model: IgModel): VNode {
   const ordered = KIND_ORDER.flatMap((k) => model.artifacts.filter((a) => a.kind === k));
 
   return (
-    <article>
+    <article data-pagefind-ignore>
       <h1>Artifacts</h1>
       <p class="page-lede">
         Every conformance resource and example this implementation guide defines —{" "}
