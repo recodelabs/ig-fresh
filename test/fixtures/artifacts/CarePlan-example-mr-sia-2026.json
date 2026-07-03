@@ -1,0 +1,89 @@
+{
+ "resourceType": "CarePlan",
+ "id": "example-mr-sia-2026",
+ "meta": {
+  "profile": [
+   "https://fhir.icr.unicef.org/StructureDefinition/ICRCampaign"
+  ]
+ },
+ "extension": [
+  {
+   "url": "https://fhir.icr.unicef.org/StructureDefinition/campaign-round",
+   "valuePositiveInt": 1
+  },
+  {
+   "url": "https://fhir.icr.unicef.org/StructureDefinition/target-geography",
+   "valueReference": {
+    "reference": "Location/example-district"
+   }
+  },
+  {
+   "url": "https://fhir.icr.unicef.org/StructureDefinition/planning-denominator",
+   "valueReference": {
+    "reference": "Group/example-target-population"
+   }
+  },
+  {
+   "extension": [
+    {
+     "url": "populationInformed",
+     "valueBoolean": true
+    },
+    {
+     "url": "channel",
+     "valueCodeableConcept": {
+      "coding": [
+       {
+        "code": "radio",
+        "system": "https://fhir.icr.unicef.org/CodeSystem/icr-communication-channel-cs",
+        "display": "Radio"
+       }
+      ]
+     }
+    },
+    {
+     "url": "channel",
+     "valueCodeableConcept": {
+      "coding": [
+       {
+        "code": "community-leaders",
+        "system": "https://fhir.icr.unicef.org/CodeSystem/icr-communication-channel-cs",
+        "display": "Community leaders"
+       }
+      ]
+     }
+    }
+   ],
+   "url": "https://fhir.icr.unicef.org/StructureDefinition/social-mobilization"
+  }
+ ],
+ "instantiatesCanonical": [
+  "https://fhir.icr.unicef.org/PlanDefinition/example-mr-sia-protocol"
+ ],
+ "status": "active",
+ "intent": "order",
+ "title": "Measles\u2013rubella SIA, Kambia District, June 2026 (round 1)",
+ "category": [
+  {
+   "coding": [
+    {
+     "code": "vaccination-sia",
+     "system": "https://fhir.icr.unicef.org/CodeSystem/icr-campaign-type-cs",
+     "display": "Vaccination campaign (SIA)"
+    }
+   ]
+  }
+ ],
+ "subject": {
+  "reference": "Group/example-target-population"
+ },
+ "period": {
+  "start": "2026-06-15",
+  "end": "2026-06-26"
+ },
+ "partOf": [
+  {
+   "reference": "CarePlan/example-mr-sia-national"
+  }
+ ]
+}

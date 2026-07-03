@@ -1,0 +1,55 @@
+{
+ "resourceType": "StructureDefinition",
+ "id": "exclusion-reason",
+ "url": "https://fhir.icr.unicef.org/StructureDefinition/exclusion-reason",
+ "name": "ExclusionReason",
+ "title": "Exclusion Reason",
+ "status": "draft",
+ "experimental": false,
+ "description": "Why a present, age-eligible person was clinically excluded from the intervention this round (under dose-pole height/age, pregnant, breastfeeding, acutely ill). Distinct from missed (not reached) and noncompliance (declined): the person was there and age-eligible but contraindicated. MDA treatment forms tally these per drug (espen.md rec 2 / \u00a717.4).",
+ "fhirVersion": "4.0.1",
+ "kind": "complex-type",
+ "abstract": false,
+ "context": [
+  {
+   "expression": "Task",
+   "type": "element"
+  }
+ ],
+ "type": "Extension",
+ "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+ "derivation": "constraint",
+ "differential": {
+  "element": [
+   {
+    "id": "Extension",
+    "path": "Extension",
+    "short": "Exclusion Reason",
+    "definition": "Why a present, age-eligible person was clinically excluded from the intervention this round (under dose-pole height/age, pregnant, breastfeeding, acutely ill). Distinct from missed (not reached) and noncompliance (declined): the person was there and age-eligible but contraindicated. MDA treatment forms tally these per drug (espen.md rec 2 / \u00a717.4)."
+   },
+   {
+    "id": "Extension.extension",
+    "path": "Extension.extension",
+    "max": "0"
+   },
+   {
+    "id": "Extension.url",
+    "path": "Extension.url",
+    "fixedUri": "https://fhir.icr.unicef.org/StructureDefinition/exclusion-reason"
+   },
+   {
+    "id": "Extension.value[x]",
+    "path": "Extension.value[x]",
+    "type": [
+     {
+      "code": "CodeableConcept"
+     }
+    ],
+    "binding": {
+     "strength": "extensible",
+     "valueSet": "https://fhir.icr.unicef.org/ValueSet/icr-exclusion-reason"
+    }
+   }
+  ]
+ }
+}

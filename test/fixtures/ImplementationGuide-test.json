@@ -1,0 +1,101 @@
+{
+ "resourceType": "ImplementationGuide",
+ "id": "unicef.fhir.icr",
+ "url": "https://fhir.icr.unicef.org/ImplementationGuide/unicef.fhir.icr",
+ "version": "0.1.0",
+ "name": "ICR",
+ "title": "Integrated Campaign Registry (ICR) Implementation Guide",
+ "status": "draft",
+ "publisher": "UNICEF Integrated Campaign Registry project (Ona + Crosscut)",
+ "description": "HL7 FHIR R4 Implementation Guide for UNICEF's Integrated Campaign Registry (ICR): a standards framework that lets public health campaigns (immunization SIAs, polio, NTD mass drug administration, malaria ITN/IRS, vitamin A) share, exchange, and reuse campaign data and metadata instead of re-collecting it every round. CarePlan is the architectural keystone: PlanDefinition carries the reusable campaign protocol, CarePlan the campaign execution, Task the operational unit of work, Group the households and target populations, and Location the administrative hierarchy and geospatial identity (Overture Maps GERS).",
+ "packageId": "unicef.fhir.icr",
+ "license": "Apache-2.0",
+ "fhirVersion": [
+  "4.0.1"
+ ],
+ "dependsOn": [
+  {
+   "id": "hl7tx",
+   "uri": "http://terminology.hl7.org/ImplementationGuide/hl7.terminology",
+   "packageId": "hl7.terminology.r4",
+   "version": "5.5.0"
+  }
+ ],
+ "definition": {
+  "resource": [
+   {
+    "reference": {
+     "reference": "ActivityDefinition/example-albendazole-activity"
+    },
+    "name": "Administer albendazole \u2014 MDA activity definition",
+    "exampleCanonical": "https://fhir.icr.unicef.org/StructureDefinition/ICRCampaignActivity"
+   },
+   {
+    "reference": {
+     "reference": "CodeSystem/icr-campaign-type-cs"
+    },
+    "name": "ICR Campaign Type",
+    "description": "The type of public health campaign, grouped by delivery model rather than disease (working doc \u00a73).",
+    "exampleBoolean": false
+   },
+   {
+    "reference": {
+     "reference": "CarePlan/example-mr-sia-2026"
+    },
+    "name": "Kambia MR SIA \u2014 June 2026 round",
+    "exampleCanonical": "https://fhir.icr.unicef.org/StructureDefinition/ICRCampaign"
+   },
+   {
+    "reference": {
+     "reference": "StructureDefinition/campaign-round"
+    },
+    "name": "Campaign Round",
+    "description": "Round number of this campaign execution. Each round is its own CarePlan instantiating the same protocol, linked to an umbrella campaign via CarePlan.partOf (working doc \u00a76.3).",
+    "exampleBoolean": false
+   },
+   {
+    "reference": {
+     "reference": "ValueSet/icr-campaign-type"
+    },
+    "name": "ICR Campaign Type",
+    "description": "Campaign types by delivery model. Binding: required on ICRCampaignProtocol.type and ICRCampaign.category.",
+    "exampleBoolean": false
+   }
+  ],
+  "page": {
+   "nameUrl": "toc.html",
+   "title": "Table of Contents",
+   "generation": "html",
+   "page": [
+    {
+     "nameUrl": "index.html",
+     "title": "Home",
+     "generation": "markdown"
+    },
+    {
+     "nameUrl": "background.html",
+     "title": "Background",
+     "generation": "markdown"
+    }
+   ]
+  },
+  "parameter": [
+   {
+    "code": "copyrightyear",
+    "value": "2026+"
+   },
+   {
+    "code": "releaselabel",
+    "value": "ci-build"
+   },
+   {
+    "code": "show-inherited-invariants",
+    "value": "false"
+   },
+   {
+    "code": "shownav",
+    "value": "true"
+   }
+  ]
+ }
+}

@@ -1,0 +1,97 @@
+{
+ "resourceType": "StructureDefinition",
+ "id": "ICRCampaignTask",
+ "url": "https://fhir.icr.unicef.org/StructureDefinition/ICRCampaignTask",
+ "name": "ICRCampaignTask",
+ "title": "ICR Campaign Task",
+ "status": "draft",
+ "experimental": false,
+ "description": "The assignable, trackable operational unit of work \u2014 one Task per site-session (Type A, focus = the site Location) or per household (Type B, focus = the household Group). Tasks may be pre-planned from the microplan or field-registered on discovery (the required task-origin code records which). Whether Tasks are assigned at village or household level is a configuration choice (working doc \u00a77.4).",
+ "fhirVersion": "4.0.1",
+ "kind": "resource",
+ "abstract": false,
+ "type": "Task",
+ "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Task",
+ "derivation": "constraint",
+ "differential": {
+  "element": [
+   {
+    "id": "Task.extension",
+    "path": "Task.extension",
+    "slicing": {
+     "discriminator": [
+      {
+       "type": "value",
+       "path": "url"
+      }
+     ],
+     "ordered": false,
+     "rules": "open"
+    },
+    "min": 2
+   },
+   {
+    "id": "Task.extension:deliveryStrategy",
+    "path": "Task.extension",
+    "sliceName": "deliveryStrategy",
+    "min": 1,
+    "max": "1",
+    "type": [
+     {
+      "code": "Extension",
+      "profile": [
+       "https://fhir.icr.unicef.org/StructureDefinition/delivery-strategy"
+      ]
+     }
+    ],
+    "mustSupport": true
+   },
+   {
+    "id": "Task.extension:taskOrigin",
+    "path": "Task.extension",
+    "sliceName": "taskOrigin",
+    "min": 1,
+    "max": "1",
+    "type": [
+     {
+      "code": "Extension",
+      "profile": [
+       "https://fhir.icr.unicef.org/StructureDefinition/task-origin"
+      ]
+     }
+    ],
+    "mustSupport": true
+   },
+   {
+    "id": "Task.extension:housesVisited",
+    "path": "Task.extension",
+    "sliceName": "housesVisited",
+    "min": 0,
+    "max": "1",
+    "type": [
+     {
+      "code": "Extension",
+      "profile": [
+       "https://fhir.icr.unicef.org/StructureDefinition/houses-visited"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "Task.extension:eligiblePresent",
+    "path": "Task.extension",
+    "sliceName": "eligiblePresent",
+    "min": 0,
+    "max": "1",
+    "type": [
+     {
+      "code": "Extension",
+      "profile": [
+       "https://fhir.icr.unicef.org/StructureDefinition/eligible-present"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}

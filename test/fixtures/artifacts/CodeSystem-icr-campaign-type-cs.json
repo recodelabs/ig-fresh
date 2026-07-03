@@ -1,0 +1,59 @@
+{
+ "resourceType": "CodeSystem",
+ "status": "draft",
+ "content": "complete",
+ "name": "ICRCampaignTypeCS",
+ "id": "icr-campaign-type-cs",
+ "title": "ICR Campaign Type",
+ "description": "The type of public health campaign, grouped by delivery model rather than disease (working doc \u00a73).",
+ "url": "https://fhir.icr.unicef.org/CodeSystem/icr-campaign-type-cs",
+ "concept": [
+  {
+   "code": "vaccination-sia",
+   "display": "Vaccination campaign (SIA)",
+   "definition": "Supplementary immunization activity delivering vaccines: measles\u2013rubella, polio, HPV, yellow fever PMVC, OCV.",
+   "designation": [
+    {
+     "language": "fr",
+     "value": "Campagne de vaccination (AVS)"
+    }
+   ]
+  },
+  {
+   "code": "mda",
+   "display": "Mass drug administration (NTD preventive chemotherapy)",
+   "definition": "Community-scale preventive chemotherapy for the PC-NTDs: LF, onchocerciasis, schistosomiasis, STH, trachoma.",
+   "designation": [
+    {
+     "language": "fr",
+     "value": "Distribution de masse de m\u00e9dicaments (chimiopr\u00e9vention MTN)"
+    }
+   ]
+  },
+  {
+   "code": "itn-distribution",
+   "display": "ITN mass distribution",
+   "definition": "Mass replacement distribution of insecticide-treated nets, typically registration then distribution.",
+   "designation": [
+    {
+     "language": "fr",
+     "value": "Distribution de masse de MII"
+    }
+   ]
+  },
+  {
+   "code": "irs",
+   "display": "Indoor residual spraying",
+   "definition": "Structure-by-structure insecticide spraying ahead of the malaria transmission season.",
+   "designation": [
+    {
+     "language": "fr",
+     "value": "Pulv\u00e9risation intradomiciliaire \u00e0 effet r\u00e9manent"
+    }
+   ]
+  }
+ ],
+ "caseSensitive": true,
+ "experimental": false,
+ "count": 6
+}
