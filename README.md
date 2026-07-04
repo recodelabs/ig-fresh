@@ -1,6 +1,12 @@
-# IG Topcoat
+<p align="center">
+  <img src="./logo.png" alt="IG Topcoat" width="400" />
+</p>
 
-**A modern, searchable static site generator for HL7 FHIR IG Publisher output — a topcoat over the Publisher's build.**
+<p align="center">
+  <strong>A modern, searchable static site generator for HL7 FHIR IG Publisher output — a topcoat over the Publisher's build.</strong>
+</p>
+
+# IG Topcoat
 
 The HL7 IG Publisher produces authoritative but dated HTML. `ig-topcoat` post-processes a
 built publisher `output/` directory into a redesigned static site — same page filenames
