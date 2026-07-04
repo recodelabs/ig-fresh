@@ -1,8 +1,8 @@
-# ig-fresh
+# IG Topcoat
 
-**A modern, searchable static site generator for HL7 FHIR IG Publisher output.**
+**A modern, searchable static site generator for HL7 FHIR IG Publisher output — a topcoat over the Publisher's build.**
 
-The HL7 IG Publisher produces authoritative but dated HTML. `ig-fresh` post-processes a
+The HL7 IG Publisher produces authoritative but dated HTML. `ig-topcoat` post-processes a
 built publisher `output/` directory into a redesigned static site — same page filenames
 (every link keeps working), same artifact set and canonical URLs, completely rethought
 presentation:
@@ -23,11 +23,11 @@ presentation:
   light/dark theme (self-hosted fonts, works offline), color-coded artifact taxonomy,
   responsive layout with a mobile drawer
 - **Faithful to the IG** — draft/status banner, canonical URLs with copy buttons,
-  publisher QA report and raw JSON/XML/Turtle renditions linked; everything ig-fresh
+  publisher QA report and raw JSON/XML/Turtle renditions linked; everything ig-topcoat
   doesn't re-render is copied through untouched
 
 The publisher toolchain stays the source of truth: validation, snapshot computation,
-terminology expansion, and QA all still come from `sushi` + IG Publisher. ig-fresh only
+terminology expansion, and QA all still come from `sushi` + IG Publisher. ig-topcoat only
 re-renders the site. It works on **any** IG Publisher output — see
 [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the compatibility contract.
 
@@ -35,12 +35,12 @@ re-renders the site. It works on **any** IG Publisher output — see
 
 ### In CI (recommended) — GitHub Action
 
-Consume ig-fresh by pinned version so you inherit improvements automatically. After your IG
+Consume ig-topcoat by pinned version so you inherit improvements automatically. After your IG
 Publisher build has produced `output/`:
 
 ```yaml
 - name: Render modern site
-  uses: recodelabs/ig-fresh@v1
+  uses: recodelabs/ig-topcoat@v1
   with:
     input: output      # IG Publisher output directory
     output: _site      # where to write the rendered site
@@ -72,7 +72,7 @@ ig/output/  ──►  load: ImplementationGuide-*.json (pages, resources)
 
 ## Extending & contributing
 
-ig-fresh is designed to be consumed by reference, so a renderer added once reaches every IG
+ig-topcoat is designed to be consumed by reference, so a renderer added once reaches every IG
 that upgrades. Adding support for a new resource type (StructureMap, CapabilityStatement, …)
 is the highest-leverage contribution — see [`CONTRIBUTING.md`](./CONTRIBUTING.md) and the
 "Extension point: renderers" section of [`ARCHITECTURE.md`](./ARCHITECTURE.md).

@@ -1,11 +1,11 @@
 {
-  "name": "ig-fresh",
+  "name": "ig-topcoat",
   "version": "1.0.0",
-  "description": "A modern, searchable static site generator for HL7 FHIR IG Publisher output",
+  "description": "A modern, searchable static site generator for HL7 FHIR IG Publisher output — a topcoat over the IG Publisher's build",
   "license": "Apache-2.0",
   "type": "module",
   "bin": {
-    "ig-fresh": "dist/cli.js"
+    "ig-topcoat": "dist/cli.js"
   },
   "files": [
     "dist"
@@ -20,11 +20,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/recodelabs/ig-fresh.git"
+    "url": "git+https://github.com/recodelabs/ig-topcoat.git"
   },
-  "homepage": "https://github.com/recodelabs/ig-fresh#readme",
+  "homepage": "https://github.com/recodelabs/ig-topcoat#readme",
   "bugs": {
-    "url": "https://github.com/recodelabs/ig-fresh/issues"
+    "url": "https://github.com/recodelabs/ig-topcoat/issues"
   },
   "publishConfig": {
     "access": "public"

@@ -1,14 +1,14 @@
 # Architecture
 
-## What ig-fresh is (and isn't)
+## What ig-topcoat is (and isn't)
 
-ig-fresh is a **post-processor for the HL7 FHIR IG Publisher**, not a replacement for it.
+ig-topcoat is a **post-processor for the HL7 FHIR IG Publisher**, not a replacement for it.
 The IG Publisher stays the authoritative engine — it compiles FSH, computes StructureDefinition
 snapshots, expands value sets, validates every resource, and produces the QA report and the
-canonical `.json`/`.xml`/`.ttl` artifacts. ig-fresh reads that finished build and re-renders
+canonical `.json`/`.xml`/`.ttl` artifacts. ig-topcoat reads that finished build and re-renders
 **only the presentation layer** into a modern, searchable static site.
 
-Because it trusts the Publisher's output as ground truth, ig-fresh never reimplements
+Because it trusts the Publisher's output as ground truth, ig-topcoat never reimplements
 snapshot generation, terminology expansion, or validation — the parts most likely to be
 subtly wrong.
 
@@ -19,14 +19,14 @@ FSH source
    │  IG Publisher         snapshots · expansions · validation · QA ·
    ▼                        canonical artifacts · standard HTML
 ig/output/   ◄──────────── the authoritative build (source of truth)
-   │  ig-fresh             reads output/, re-renders the presentation
+   │  ig-topcoat             reads output/, re-renders the presentation
    ▼
 site/        ◄──────────── modern site: same filenames, new look
 ```
 
 ## The compatibility contract
 
-ig-fresh consumes a standard IG Publisher `output/` directory and depends only on these
+ig-topcoat consumes a standard IG Publisher `output/` directory and depends only on these
 Publisher-produced files:
 
 | Input | Used for |
@@ -37,13 +37,13 @@ Publisher-produced files:
 | generated narrative HTML (`index.html`, authored pages) | authored content is extracted (cheerio) and re-hosted in the new shell |
 
 It requires nothing IG-specific and works with any FHIR version the Publisher emits. As long
-as this output shape holds, ig-fresh works — that is the stability promise consumers couple to.
+as this output shape holds, ig-topcoat works — that is the stability promise consumers couple to.
 
 ## Fidelity — why links keep working
 
-ig-fresh writes pages with the **exact same filenames** the Publisher uses
+ig-topcoat writes pages with the **exact same filenames** the Publisher uses
 (`StructureDefinition-icr-campaign.html`, `artifacts.html`, …), so every internal and inbound
-link resolves unchanged. Anything ig-fresh does not re-render — `qa.html`, the raw
+link resolves unchanged. Anything ig-topcoat does not re-render — `qa.html`, the raw
 `.json`/`.xml`/`.ttl` renditions, `package.tgz`, images — is **copied straight through**. The
 result is a drop-in replacement for `output/`: same URLs, same downloads, same artifact set,
 with a modern UI on top.
@@ -92,19 +92,19 @@ isn't specialized yet.
    (`ArtifactKind`, `KIND_INFO`, `KIND_ORDER`) and classify it in `src/load/artifacts.ts`.
 4. Add a render test under `test/`.
 
-Because ig-fresh is consumed by reference (see below), a renderer added once reaches every
+Because ig-topcoat is consumed by reference (see below), a renderer added once reaches every
 IG that upgrades — improvements flow to all consumers.
 
 ## Distribution & downstream improvements
 
-ig-fresh is meant to be **consumed by reference, never forked**. Each IG references a
+ig-topcoat is meant to be **consumed by reference, never forked**. Each IG references a
 published, versioned build; patch/minor improvements then reach every consumer on its next
 build with no action on their part.
 
-- **GitHub Action (primary):** `uses: recodelabs/ig-fresh@v1`. The composite action builds
-  ig-fresh from its pinned ref and renders the caller's `output/`. The `v1` moving tag carries
+- **GitHub Action (primary):** `uses: recodelabs/ig-topcoat@v1`. The composite action builds
+  ig-topcoat from its pinned ref and renders the caller's `output/`. The `v1` moving tag carries
   non-breaking improvements automatically.
-- **npm CLI (optional, when published):** `npx ig-fresh@^1 build -i output -o site`. The
+- **npm CLI (optional, when published):** `npx ig-topcoat@^1 build -i output -o site`. The
   published package ships a prebuilt `dist/` (including the questionnaire-preview bundle), so
   the React/Mantine/formbox toolchain lives in `devDependencies` and is **not** installed by
   consumers.

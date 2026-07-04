@@ -1,4 +1,4 @@
-name: "ig-fresh"
+name: "ig-topcoat"
 description: "Render an HL7 FHIR IG Publisher output directory into a modern, searchable static site."
 author: "Recode Labs"
 branding:
@@ -29,7 +29,7 @@ runs:
         cache: "npm"
         cache-dependency-path: ${{ github.action_path }}/package-lock.json
 
-    - name: Build ig-fresh
+    - name: Build ig-topcoat
       shell: bash
       run: |
         cd "$GITHUB_ACTION_PATH"

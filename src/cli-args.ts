@@ -5,10 +5,10 @@ export interface CliArgs {
   verbose: boolean;
 }
 
-export const USAGE = `ig-fresh — a modern static site generator for HL7 IG Publisher output
+export const USAGE = `ig-topcoat — a modern static site generator for HL7 IG Publisher output
 
 Usage:
-  ig-fresh build -i <publisher-output-dir> -o <site-dir> [--verbose]
+  ig-topcoat build -i <publisher-output-dir> -o <site-dir> [--verbose]
 
 Options:
   -i, --input    Path to a built IG Publisher output directory
