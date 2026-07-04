@@ -278,14 +278,8 @@ function copyAssets(outDir: string) {
   );
 
   const fontFiles: [string, string][] = [
-    ["@fontsource-variable/fraunces", "fraunces-latin-wght-normal.woff2"],
-    ["@fontsource-variable/fraunces", "fraunces-latin-wght-italic.woff2"],
-    ["@fontsource/ibm-plex-sans", "ibm-plex-sans-latin-400-normal.woff2"],
-    ["@fontsource/ibm-plex-sans", "ibm-plex-sans-latin-500-normal.woff2"],
-    ["@fontsource/ibm-plex-sans", "ibm-plex-sans-latin-600-normal.woff2"],
-    ["@fontsource/ibm-plex-sans", "ibm-plex-sans-latin-700-normal.woff2"],
-    ["@fontsource/ibm-plex-mono", "ibm-plex-mono-latin-400-normal.woff2"],
-    ["@fontsource/ibm-plex-mono", "ibm-plex-mono-latin-600-normal.woff2"],
+    ["@fontsource-variable/plus-jakarta-sans", "plus-jakarta-sans-latin-wght-normal.woff2"],
+    ["@fontsource-variable/jetbrains-mono", "jetbrains-mono-latin-wght-normal.woff2"],
   ];
   for (const [pkg, file] of fontFiles) {
     fs.copyFileSync(path.join(PKG_ROOT, "node_modules", pkg, "files", file), path.join(fonts, file));
