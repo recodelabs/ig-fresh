@@ -1,6 +1,6 @@
 {
   "name": "ig-fresh",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A modern, searchable static site generator for HL7 FHIR IG Publisher output",
   "license": "Apache-2.0",
   "type": "module",
@@ -8,14 +8,33 @@
     "ig-fresh": "dist/cli.js"
   },
   "files": [
-    "dist",
-    "assets"
+    "dist"
   ],
+  "keywords": [
+    "fhir",
+    "implementation-guide",
+    "ig-publisher",
+    "hl7",
+    "static-site-generator",
+    "healthcare"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/recodelabs/ig-fresh.git"
+  },
+  "homepage": "https://github.com/recodelabs/ig-fresh#readme",
+  "bugs": {
+    "url": "https://github.com/recodelabs/ig-fresh/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc && npm run css && node scripts/build-formbox.mjs && cp src/ui/site.js src/ui/palette.js dist/ui/",
     "css": "tailwindcss -i src/ui/site.css -o dist/ui/site.built.css --minify",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepack": "npm run build"
   },
   "engines": {
     "node": ">=20"
@@ -23,32 +42,32 @@
   "dependencies": {
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@fontsource-variable/plus-jakarta-sans": "^5.2.8",
+    "cheerio": "^1.0.0",
+    "fuse.js": "^7.0.0",
+    "pagefind": "^1.3.0",
+    "preact": "^10.24.0",
+    "preact-render-to-string": "^6.5.0",
+    "shiki": "^1.24.0"
+  },
+  "devDependencies": {
     "@formbox/fhir": "^0.4.1",
     "@formbox/mantine-theme": "^0.4.1",
     "@formbox/renderer": "^0.4.1",
     "@lhncbc/ucum-lhc": "^7.1.8",
     "@mantine/core": "^8.3.18",
     "@mantine/hooks": "^8.3.18",
-    "cheerio": "^1.0.0",
+    "@tailwindcss/cli": "^4.0.0",
+    "@types/node": "^20.0.0",
     "classnames": "^2.5.1",
+    "esbuild": "^0.28.1",
     "fhirpath": "^4.11.0",
-    "fuse.js": "^7.0.0",
     "fuzzy-search": "^3.2.1",
     "hashery": "^2.0.0",
     "mobx": "^6.16.1",
     "mobx-react-lite": "^4.1.1",
     "mobx-utils": "^6.1.1",
-    "pagefind": "^1.3.0",
-    "preact": "^10.24.0",
-    "preact-render-to-string": "^6.5.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "shiki": "^1.24.0"
-  },
-  "devDependencies": {
-    "@tailwindcss/cli": "^4.0.0",
-    "@types/node": "^20.0.0",
-    "esbuild": "^0.28.1",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"
