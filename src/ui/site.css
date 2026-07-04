@@ -983,6 +983,104 @@ h1,
   margin-left: auto;
 }
 
+/* ------------------------------------------------------- questionnaire */
+
+.q-preview {
+  border: 1px dashed var(--border-strong);
+  border-radius: 12px;
+  background: var(--bg-sunken);
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  padding: 8px;
+}
+.q-preview-cta {
+  max-width: 420px;
+  text-align: center;
+  padding: 28px 20px;
+  color: var(--ink-muted);
+}
+.q-preview-cta svg {
+  color: var(--kind-questionnaire);
+  margin-bottom: 10px;
+}
+.q-preview-cta p {
+  margin: 0 0 16px;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.q-load-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--kind-questionnaire);
+  border: none;
+  border-radius: 9px;
+  padding: 9px 18px;
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+.q-load-btn:hover {
+  filter: brightness(1.08);
+}
+.q-load-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+.q-load-size {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 400;
+  opacity: 0.8;
+  padding: 1px 7px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.2);
+}
+.q-preview-note {
+  display: block;
+  margin-top: 12px;
+  font-size: 11.5px;
+  color: var(--ink-faint);
+}
+.q-preview-error {
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--ink-muted);
+  font-size: 13px;
+}
+/* the mounted form: a clean light "paper" surface regardless of site theme */
+.q-preview-surface {
+  width: 100%;
+  background: #fff;
+  color: #1a2230;
+  border-radius: 11px;
+  padding: 26px 28px;
+  box-shadow: var(--shadow);
+}
+.q-structure .q-group-row td {
+  background: var(--bg-sunken);
+}
+.q-group-text {
+  font-weight: 600;
+  font-family: var(--font-display);
+}
+.q-group-mark {
+  color: var(--kind-questionnaire);
+  font-size: 11px;
+}
+.q-leaf-mark {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--border-strong);
+  transform: translateY(-2px);
+}
+
 /* -------------------------------------------------------------- narrative */
 
 .prose {

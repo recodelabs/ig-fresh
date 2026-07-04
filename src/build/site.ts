@@ -13,6 +13,7 @@ import { LinkResolver } from "../render/links.js";
 import { renderStructureDefinition, type RenderCtx } from "../render/structure-definition.js";
 import { renderCodeSystem, renderValueSet } from "../render/terminology.js";
 import { renderInstance } from "../render/instance.js";
+import { renderQuestionnaire } from "../render/questionnaire.js";
 import { renderArtifactsIndex } from "../render/artifacts-index.js";
 import { renderNarrative, renderSearchPage } from "../render/page.js";
 
@@ -118,7 +119,9 @@ export async function buildSite(
             ? renderCodeSystem(a, ctx)
             : a.resourceType === "ValueSet"
               ? renderValueSet(a, ctx)
-              : renderInstance(a, ctx);
+              : a.resourceType === "Questionnaire"
+                ? renderQuestionnaire(a, ctx)
+                : renderInstance(a, ctx);
       const crumbs: Crumb[] = [
         { label: "Home", href: "index.html" },
         { label: KIND_INFO[a.kind].plural, href: "artifacts.html" },
@@ -263,6 +266,11 @@ function copyAssets(outDir: string) {
   fs.copyFileSync(cssSrc, path.join(igf, "site.css"));
   for (const f of ["site.js", "palette.js"]) {
     fs.copyFileSync(path.join(PKG_ROOT, "dist", "ui", f), path.join(igf, f));
+  }
+  // Formbox questionnaire-preview island (lazy-loaded on questionnaire pages).
+  for (const f of ["formbox.js", "formbox.css"]) {
+    const src = path.join(PKG_ROOT, "dist", "ui", f);
+    if (fs.existsSync(src)) fs.copyFileSync(src, path.join(igf, f));
   }
   fs.copyFileSync(
     path.join(PKG_ROOT, "node_modules", "fuse.js", "dist", "fuse.min.mjs"),

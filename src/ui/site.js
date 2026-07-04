@@ -135,6 +135,63 @@
     });
   }
 
+  // --- questionnaire page: tabs + lazy formbox preview -----------------------
+  document.querySelectorAll("[data-q-tab]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var name = btn.getAttribute("data-q-tab");
+      document.querySelectorAll("[data-q-tab]").forEach(function (b) {
+        b.setAttribute("aria-selected", String(b === btn));
+      });
+      document.querySelectorAll("[data-q-panel]").forEach(function (p) {
+        p.hidden = p.getAttribute("data-q-panel") !== name;
+      });
+    });
+  });
+
+  var formboxLoading = false;
+  function loadFormbox() {
+    return new Promise(function (resolve, reject) {
+      if (window.igfMountQuestionnaire) return resolve();
+      if (formboxLoading) {
+        var iv = setInterval(function () {
+          if (window.igfMountQuestionnaire) { clearInterval(iv); resolve(); }
+        }, 60);
+        return;
+      }
+      formboxLoading = true;
+      var css = document.createElement("link");
+      css.rel = "stylesheet";
+      css.href = "igf/formbox.css";
+      document.head.appendChild(css);
+      var s = document.createElement("script");
+      s.src = "igf/formbox.js";
+      s.onload = function () { resolve(); };
+      s.onerror = function () { reject(new Error("Failed to load form renderer")); };
+      document.body.appendChild(s);
+    });
+  }
+
+  document.querySelectorAll("[data-questionnaire-load]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var host = btn.closest("[data-questionnaire-preview]");
+      var src = host.getAttribute("data-questionnaire-src");
+      btn.disabled = true;
+      btn.textContent = "Loading…";
+      Promise.all([loadFormbox(), fetch(src).then(function (r) { return r.json(); })])
+        .then(function (res) {
+          var q = res[1];
+          host.innerHTML = '<div class="q-preview-surface"></div>';
+          window.igfMountQuestionnaire(host.querySelector(".q-preview-surface"), q);
+        })
+        .catch(function (e) {
+          host.innerHTML =
+            '<div class="q-preview-error">Could not load the interactive preview (' +
+            (e && e.message ? e.message : "error") +
+            "). The Item structure and JSON tabs still work.</div>";
+        });
+    });
+  });
+
   // --- copy buttons ---------------------------------------------------------
   document.querySelectorAll("[data-copy]").forEach(function (btn) {
     btn.addEventListener("click", function () {

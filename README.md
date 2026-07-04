@@ -15,6 +15,10 @@ presentation:
   summary, and a syntax-highlighted JSON tab (shiki, light+dark)
 - **Filterable terminology pages** — instant client-side concept filtering; ValueSet
   expansions pulled from `expansions.json`
+- **Interactive questionnaire preview** — Questionnaire pages get a live form rendered by
+  [`@formbox/renderer`](https://www.npmjs.com/package/@formbox/renderer) (the renderer
+  Cinder exposes), plus a static item-structure tree and JSON. The ~0.7 MB renderer bundle
+  is built once as a shared asset and lazy-loaded only when a user opens the preview
 - **A designed reading experience** — warm-paper light theme and deep-ink dark theme,
   Fraunces + IBM Plex type (self-hosted, works offline), color-coded artifact taxonomy,
   responsive layout with a mobile drawer
