@@ -19,8 +19,8 @@ presentation:
   [`@formbox/renderer`](https://www.npmjs.com/package/@formbox/renderer) (the renderer
   Cinder exposes), plus a static item-structure tree and JSON. The ~0.7 MB renderer bundle
   is built once as a shared asset and lazy-loaded only when a user opens the preview
-- **A designed reading experience** — warm-paper light theme and deep-ink dark theme,
-  Fraunces + IBM Plex type (self-hosted, works offline), color-coded artifact taxonomy,
+- **A designed reading experience** — Plus Jakarta Sans + JetBrains Mono over a UNICEF-cyan
+  light/dark theme (self-hosted fonts, works offline), color-coded artifact taxonomy,
   responsive layout with a mobile drawer
 - **Faithful to the IG** — draft/status banner, canonical URLs with copy buttons,
   publisher QA report and raw JSON/XML/Turtle renditions linked; everything ig-fresh
@@ -28,13 +28,31 @@ presentation:
 
 The publisher toolchain stays the source of truth: validation, snapshot computation,
 terminology expansion, and QA all still come from `sushi` + IG Publisher. ig-fresh only
-re-renders the site.
+re-renders the site. It works on **any** IG Publisher output — see
+[`ARCHITECTURE.md`](./ARCHITECTURE.md) for the compatibility contract.
 
 ## Usage
 
+### In CI (recommended) — GitHub Action
+
+Consume ig-fresh by pinned version so you inherit improvements automatically. After your IG
+Publisher build has produced `output/`:
+
+```yaml
+- name: Render modern site
+  uses: recodelabs/ig-fresh@v1
+  with:
+    input: output      # IG Publisher output directory
+    output: _site      # where to write the rendered site
+```
+
+Pinning `@v1` gives you every non-breaking improvement on your next build; breaking changes
+land only in a new major (`@v2`).
+
+### Locally
+
 ```sh
 npm install && npm run build
-
 node dist/cli.js build -i path/to/ig/output -o path/to/site
 ```
 
@@ -52,13 +70,15 @@ ig/output/  ──►  load: ImplementationGuide-*.json (pages, resources)
             ──►  copy-through: everything else (qa.html, renditions, package.tgz…)
 ```
 
-## Development
+## Extending & contributing
 
-- `npm test` — vitest unit + render tests
-- `node scripts/check-links.mjs <site-dir> --only-fresh` — assert no broken internal links
+ig-fresh is designed to be consumed by reference, so a renderer added once reaches every IG
+that upgrades. Adding support for a new resource type (StructureMap, CapabilityStatement, …)
+is the highest-leverage contribution — see [`CONTRIBUTING.md`](./CONTRIBUTING.md) and the
+"Extension point: renderers" section of [`ARCHITECTURE.md`](./ARCHITECTURE.md).
 
-Fails soft: a malformed artifact gets a generic fallback page and a warning, never a
-broken build.
+Fails soft: a malformed or unrecognized artifact gets a generic fallback page and a warning,
+never a broken build.
 
 ## License
 
