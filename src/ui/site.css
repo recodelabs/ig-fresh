@@ -178,7 +178,7 @@ kbd {
 .brand-text {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 5px;
   line-height: 1.15;
   min-width: 0;
 }
