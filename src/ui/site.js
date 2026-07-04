@@ -171,25 +171,19 @@
     });
   }
 
-  document.querySelectorAll("[data-questionnaire-load]").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var host = btn.closest("[data-questionnaire-preview]");
-      var src = host.getAttribute("data-questionnaire-src");
-      btn.disabled = true;
-      btn.textContent = "Loading…";
-      Promise.all([loadFormbox(), fetch(src).then(function (r) { return r.json(); })])
-        .then(function (res) {
-          var q = res[1];
-          host.innerHTML = '<div class="q-preview-surface"></div>';
-          window.igfMountQuestionnaire(host.querySelector(".q-preview-surface"), q);
-        })
-        .catch(function (e) {
-          host.innerHTML =
-            '<div class="q-preview-error">Could not load the interactive preview (' +
-            (e && e.message ? e.message : "error") +
-            "). The Item structure and JSON tabs still work.</div>";
-        });
-    });
+  document.querySelectorAll("[data-questionnaire-preview]").forEach(function (host) {
+    var src = host.getAttribute("data-questionnaire-src");
+    Promise.all([loadFormbox(), fetch(src).then(function (r) { return r.json(); })])
+      .then(function (res) {
+        host.innerHTML = '<div class="q-preview-surface"></div>';
+        window.igfMountQuestionnaire(host.querySelector(".q-preview-surface"), res[1]);
+      })
+      .catch(function (e) {
+        host.innerHTML =
+          '<div class="q-preview-error">Could not render the interactive form (' +
+          (e && e.message ? e.message : "error") +
+          "). The Item structure and JSON tabs still work.</div>";
+      });
   });
 
   // --- copy buttons ---------------------------------------------------------
