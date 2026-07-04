@@ -164,7 +164,7 @@ export function renderPage(model: IgModel, opts: PageOpts): string {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{`${opts.title} — ${model.meta.title}`}</title>
-        <meta name="generator" content="ig-fresh" />
+        <meta name="generator" content="ig-topcoat" />
         <link rel="stylesheet" href="igf/site.css" />
         <script
           // set theme before first paint to avoid flash
@@ -198,7 +198,7 @@ export function renderPage(model: IgModel, opts: PageOpts): string {
                 {model.meta.title} v{model.meta.version} · {model.meta.publisher ?? ""}
               </span>
               <span>
-                Built from IG Publisher output by <a href="https://github.com/onaio/ig-fresh">ig-fresh</a> ·{" "}
+                Built from IG Publisher output by <a href="https://github.com/recodelabs/ig-topcoat">IG Topcoat</a> ·{" "}
                 <a href="qa.html">QA report</a>
               </span>
             </footer>

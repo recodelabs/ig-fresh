@@ -2,7 +2,7 @@ name: Release
 
 # On a version tag (v1.2.3), build + test, then publish to npm.
 # npm publish only runs when the NPM_TOKEN secret is set — until then the
-# GitHub Action (recodelabs/ig-fresh@v1) remains the primary distribution path
+# GitHub Action (recodelabs/ig-topcoat@v1) remains the primary distribution path
 # and this workflow just validates the tagged commit.
 on:
   push:

@@ -31,7 +31,7 @@ Initial release as a reusable companion tool for the HL7 FHIR IG Publisher.
 
 ### Distribution
 
-- **GitHub Action** (`action.yml`) — the primary way to consume ig-fresh by pinned version.
+- **GitHub Action** (`action.yml`) — the primary way to consume ig-topcoat by pinned version.
 - **npm package** — ships prebuilt `dist/`; the eventual `npx` path installs only runtime
   dependencies.
 

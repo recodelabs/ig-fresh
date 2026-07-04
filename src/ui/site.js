@@ -1,4 +1,4 @@
-// ig-fresh client islands: theme, drawer, collapsibles, tabs, tree, filters, copy.
+// ig-topcoat client islands: theme, drawer, collapsibles, tabs, tree, filters, copy.
 // Plain JS, no framework. Everything degrades: content is server-rendered.
 (function () {
   "use strict";

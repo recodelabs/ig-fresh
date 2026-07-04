@@ -18,12 +18,12 @@ async function main() {
   const stats = await buildSite(args.input!, args.out!, { verbose: args.verbose });
   const secs = ((Date.now() - started) / 1000).toFixed(1);
   console.log(
-    `\nig-fresh: ${stats.pages} pages (${stats.artifacts} artifacts) in ${secs}s` +
+    `\nig-topcoat: ${stats.pages} pages (${stats.artifacts} artifacts) in ${secs}s` +
       (stats.warnings.length ? ` — ${stats.warnings.length} warning(s)` : ""),
   );
 }
 
 main().catch((e) => {
-  console.error(`ig-fresh: build failed — ${e?.stack ?? e}`);
+  console.error(`ig-topcoat: build failed — ${e?.stack ?? e}`);
   process.exit(1);
 });

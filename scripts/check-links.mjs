@@ -9,7 +9,7 @@ if (!dir) {
   console.error("usage: check-links.mjs <site-dir> [--only-fresh]");
   process.exit(2);
 }
-// --only-fresh: check only pages ig-fresh generated (meta generator), not copied-through publisher pages
+// --only-fresh: check only pages ig-topcoat generated (meta generator), not copied-through publisher pages
 const onlyFresh = process.argv.includes("--only-fresh");
 
 let pages = 0;
@@ -19,7 +19,7 @@ const broken = [];
 for (const file of fs.readdirSync(dir)) {
   if (!file.endsWith(".html")) continue;
   const html = fs.readFileSync(path.join(dir, file), "utf8");
-  if (onlyFresh && !html.includes('name="generator" content="ig-fresh"')) continue;
+  if (onlyFresh && !html.includes('name="generator" content="ig-topcoat"')) continue;
   pages++;
   const $ = cheerio.load(html);
   const targets = [];
