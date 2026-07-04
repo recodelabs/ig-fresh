@@ -7,9 +7,9 @@ receive minor/patch improvements automatically; breaking changes land only in a 
 
 ## [Unreleased]
 
-## [1.0.0] — pending
+## [1.0.0] — 2026-07-04
 
-Initial release as a reusable companion tool for the HL7 FHIR IG Publisher.
+Initial release of **IG Topcoat**, a reusable companion tool for the HL7 FHIR IG Publisher.
 
 ### Features
 
@@ -31,11 +31,8 @@ Initial release as a reusable companion tool for the HL7 FHIR IG Publisher.
 
 ### Distribution
 
-- **GitHub Action** (`action.yml`) — the primary way to consume ig-topcoat by pinned version.
-- **npm package** — ships prebuilt `dist/`; the eventual `npx` path installs only runtime
-  dependencies.
-
-### Notes
-
-- Package/repo name is being finalized; references will be updated before the first tagged
-  release and npm publish.
+- **GitHub Action** — the primary way to consume IG Topcoat by pinned version:
+  `uses: recodelabs/ig-topcoat@v1`.
+- **npm package** — ships a prebuilt `dist/`; the `npx` path installs only runtime
+  dependencies. npm publish is wired (release workflow) and activates once an `NPM_TOKEN`
+  secret is set.
