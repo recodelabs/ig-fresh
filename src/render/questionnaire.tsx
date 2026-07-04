@@ -142,27 +142,16 @@ export function renderQuestionnaire(a: Artifact, ctx: RenderCtx): VNode {
           </button>
         </div>
 
-        {/* Preview: lazy formbox island */}
+        {/* Preview: formbox island, auto-mounted on load */}
         <div data-q-panel="preview">
           <div
             class="q-preview"
             data-questionnaire-preview
             data-questionnaire-src={jsonUrl}
           >
-            <div class="q-preview-cta">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                <rect x="4" y="3" width="16" height="18" rx="2" />
-                <path d="M8 7h8M8 11h8M8 15h5" />
-              </svg>
-              <p>
-                Render this questionnaire as an interactive form — the same renderer Cinder
-                uses. You can fill it in to preview validation and conditional logic.
-              </p>
-              <button type="button" class="q-load-btn" data-questionnaire-load>
-                Load interactive preview
-                <span class="q-load-size">≈ 0.7 MB</span>
-              </button>
-              <span class="q-preview-note">Nothing is submitted or stored — this is a local preview.</span>
+            <div class="q-preview-loading" role="status">
+              <span class="q-spinner" aria-hidden="true" />
+              Rendering interactive form…
             </div>
           </div>
         </div>

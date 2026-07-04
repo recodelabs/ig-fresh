@@ -73,10 +73,10 @@ describe("renderQuestionnaire", () => {
     expect(html).toContain('data-q-tab="json"');
   });
 
-  it("wires a lazy preview island pointed at the questionnaire JSON", () => {
+  it("wires an auto-mounting preview island pointed at the questionnaire JSON", () => {
     expect(html).toContain("data-questionnaire-preview");
     expect(html).toContain('data-questionnaire-src="Questionnaire-icr-mda-supervision-checklist.json"');
-    expect(html).toContain("data-questionnaire-load");
+    expect(html).toContain("q-preview-loading");
   });
 
   it("renders a static item-structure table with groups, types, required flags, link ids", () => {
