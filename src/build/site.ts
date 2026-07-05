@@ -293,6 +293,7 @@ function copyAssets(outDir: string): AssetManifest {
     ["palette.js", path.join(PKG_ROOT, "dist", "ui", "palette.js")],
     ["formbox.js", path.join(PKG_ROOT, "dist", "ui", "formbox.js")],
     ["formbox.css", path.join(PKG_ROOT, "dist", "ui", "formbox.css")],
+    ["mermaid.js", path.join(PKG_ROOT, "dist", "ui", "mermaid.js")],
   ];
   for (const [name, src] of runtime) {
     if (!fs.existsSync(src)) continue;

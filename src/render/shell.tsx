@@ -240,6 +240,7 @@ export function renderPage(model: IgModel, opts: PageOpts): string {
           src={asset(model, "site.js")}
           data-formbox-js={asset(model, "formbox.js")}
           data-formbox-css={asset(model, "formbox.css")}
+          data-mermaid-js={asset(model, "mermaid.js")}
           defer
         />
         <script src={asset(model, "palette.js")} defer />

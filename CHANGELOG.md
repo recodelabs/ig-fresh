@@ -9,6 +9,23 @@ receive minor/patch improvements automatically; breaking changes land only in a 
 
 ### Added
 
+- **Mermaid diagram rendering in narrative pages (client-side, lazy, themed)** — a
+  ` ```mermaid ` fence authored in an IG's `pagecontent/*.md` (which IG Publisher emits as
+  `<pre class="language-mermaid"><code…>SOURCE</code></pre>` and topcoat previously left
+  un-rendered, having stripped IGP's own client script) now renders as an SVG diagram.
+  `extractNarrative` rewrites each such block into
+  `<pre class="mermaid" data-mermaid-src="SOURCE">SOURCE</pre>` (the source kept both as
+  visible text — a JS-less/pre-render fallback — and in `data-mermaid-src` so the block can
+  re-render on theme toggle), preserving the diagram source whitespace-exactly. A new runtime
+  island (`src/ui/mermaid-entry.js` → `dist/ui/mermaid.js`, bundled by `scripts/build-mermaid.mjs`,
+  content-fingerprinted like the other assets) is loaded by `site.js` **only** on pages that
+  actually contain a diagram (gated on `[data-mermaid-src]` DOM presence), so diagram-free
+  pages fetch nothing. The diagram is themed to the light/dark toggle and re-renders when the
+  toggle flips; a malformed diagram degrades per-block (source stays visible with a small
+  "could not be rendered" note) and never aborts the page. The mermaid bundle is ~1 MB gzipped
+  — a documented, lazy, cached, diagram-only cost. Example/artifact pages are out of scope
+  (no authored mermaid prose there).
+
 - **Content-hash fingerprints for runtime assets (instant cache busting)** — the JS/CSS
   bundles (`site.js`, `palette.js`, `formbox.js`, `site.css`, `formbox.css`) are now emitted
   at content-fingerprinted paths (`igf/<name>.<hash>.<ext>`, first 8 hex of SHA-256) instead

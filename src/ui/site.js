@@ -8,6 +8,8 @@
     btn.addEventListener("click", function () {
       var dark = document.documentElement.classList.toggle("dark");
       try { localStorage.setItem("igf-theme", dark ? "dark" : "light"); } catch (e) {}
+      // Re-theme any rendered mermaid diagrams to match the new surface.
+      if (window.igfRenderMermaid) window.igfRenderMermaid(dark);
     });
   });
 
@@ -232,6 +234,25 @@
           "). The Item structure and JSON tabs still work.</div>";
       });
   });
+
+  // --- lazy mermaid diagram renderer ----------------------------------------
+  // Narrative pages that author a ```mermaid fence carry one or more
+  // <pre class="mermaid" data-mermaid-src="…"> blocks (rewritten at build time by
+  // extractNarrative). Load the mermaid bundle ONLY when such a block exists, so
+  // diagram-free pages fetch nothing. The hashed bundle URL is advertised on the
+  // site.js <script> tag (data-mermaid-js), like the formbox handoff.
+  if (document.querySelector("[data-mermaid-src]")) {
+    var mEl = document.querySelector("script[data-mermaid-js]");
+    var mSrc = (mEl && mEl.getAttribute("data-mermaid-js")) || "igf/mermaid.js";
+    var ms = document.createElement("script");
+    ms.src = mSrc;
+    ms.onload = function () {
+      if (window.igfRenderMermaid) {
+        window.igfRenderMermaid(document.documentElement.classList.contains("dark"));
+      }
+    };
+    document.body.appendChild(ms);
+  }
 
   // --- copy buttons ---------------------------------------------------------
   document.querySelectorAll("[data-copy]").forEach(function (btn) {

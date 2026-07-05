@@ -30,7 +30,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc && npm run css && node scripts/build-formbox.mjs && cp src/ui/site.js src/ui/palette.js dist/ui/",
+    "build": "tsc && npm run css && node scripts/build-formbox.mjs && node scripts/build-mermaid.mjs && cp src/ui/site.js src/ui/palette.js dist/ui/",
     "css": "tailwindcss -i src/ui/site.css -o dist/ui/site.built.css --minify",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -63,6 +63,7 @@
     "fhirpath": "^4.11.0",
     "fuzzy-search": "^3.2.1",
     "hashery": "^2.0.0",
+    "mermaid": "^11.16.0",
     "mobx": "^6.16.1",
     "mobx-react-lite": "^4.1.1",
     "mobx-utils": "^6.1.1",
