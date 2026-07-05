@@ -174,10 +174,18 @@ describe("renderArtifactsIndex tag filter", () => {
     expect(html).toContain('data-tag-chip aria-pressed="true"'); // "All" chip
     expect(html).toContain('data-tag-chip="espen"');
     expect(html).toContain("ESPEN");
-    expect(html).toContain('data-tags="espen"');
+    // data-tags is a JSON array of codes ("-escaped in the serialized attribute)
+    expect(html).toContain('data-tags="[&quot;espen&quot;]"');
     expect(html).toContain("tag-badge");
     // count reflects only the one tagged example
     expect(html).toContain(">1<");
+  });
+
+  it("omits data-tags on untagged entries", () => {
+    const html = renderToString(
+      renderArtifactsIndex({ ...model, artifacts: [tagged, untagged] }),
+    );
+    expect(html.match(/data-tags/g)).toHaveLength(1);
   });
 
   it("omits the tag chip row entirely when no example is tagged", () => {

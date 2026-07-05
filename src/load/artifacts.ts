@@ -24,14 +24,15 @@ function classify(json: any, ref: ResourceRef | undefined): ArtifactKind {
 }
 
 /** Read project tags from a resource's `meta.tag`; each coding's display (or code) is a label. */
-function extractTags(json: any): ArtifactTag[] {
+export function extractTags(json: any): ArtifactTag[] {
   const tags = json?.meta?.tag;
   if (!Array.isArray(tags)) return [];
   const out: ArtifactTag[] = [];
   const seen = new Set<string>();
   for (const t of tags) {
-    const code = typeof t?.code === "string" ? t.code : undefined;
-    const display = typeof t?.display === "string" ? t.display : undefined;
+    // truthiness (not just typeof) so empty strings fall through to the fallback
+    const code = typeof t?.code === "string" && t.code ? t.code : undefined;
+    const display = typeof t?.display === "string" && t.display ? t.display : undefined;
     const label = display ?? code;
     if (!label) continue;
     const key = code ?? label;

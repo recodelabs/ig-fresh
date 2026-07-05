@@ -146,7 +146,9 @@
         var tag = chip.getAttribute("data-tag-chip");
         tagChips.forEach(function (c) { c.setAttribute("aria-pressed", String(c === chip)); });
         document.querySelectorAll("[data-filter-text]").forEach(function (row) {
-          var rowTags = (row.getAttribute("data-tags") || "").split("|");
+          // data-tags is a JSON array of tag codes (codes may contain any character)
+          var rowTags = [];
+          try { rowTags = JSON.parse(row.getAttribute("data-tags") || "[]"); } catch (e) {}
           var ok = !tag || rowTags.indexOf(tag) !== -1;
           row.setAttribute("data-tag-hidden", ok ? "0" : "1");
         });

@@ -7,6 +7,15 @@ receive minor/patch improvements automatically; breaking changes land only in a 
 
 ## [Unreleased]
 
+### Added
+
+- **Project-tag filter for the artifacts gallery** — artifacts' FHIR `meta.tag` codings
+  (display, falling back to code) are read as project tags. The artifacts index gains an
+  "All" + per-tag chip row with counts (shown only when at least one artifact is tagged)
+  that filters entries client-side and composes with the existing kind chips and text
+  filter. Tagged entries show a tag badge in the listing and on the artifact page header.
+  Fully generic — no tag or IG is hard-coded; untagged IGs render unchanged.
+
 ## [1.0.0] — 2026-07-04
 
 Initial release of **IG Topcoat**, a reusable companion tool for the HL7 FHIR IG Publisher.

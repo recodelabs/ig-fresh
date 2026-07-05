@@ -67,7 +67,7 @@ export function renderArtifactsIndex(model: IgModel): VNode {
             class={`artifact-item kind-${a.kind}`}
             href={a.filename}
             data-kind={a.kind}
-            data-tags={a.tags.map((t) => t.code).join("|")}
+            data-tags={a.tags.length ? JSON.stringify(a.tags.map((t) => t.code)) : undefined}
             data-filter-text={`${a.name} ${a.title} ${a.id} ${a.description ?? ""} ${a.tags
               .map((t) => t.label)
               .join(" ")}`.toLowerCase()}
