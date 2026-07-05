@@ -202,8 +202,15 @@
     var src = host.getAttribute("data-questionnaire-src");
     Promise.all([loadFormbox(), fetch(src).then(function (r) { return r.json(); })])
       .then(function (res) {
+        // Build-time-resolved options for IG-local answerValueSet canonicals
+        // (emitted by the questionnaire page when applicable).
+        var opts = {};
+        var vsEl = document.getElementById("igf-vs-options");
+        if (vsEl) {
+          try { opts.localValueSets = JSON.parse(vsEl.textContent); } catch (e) {}
+        }
         host.innerHTML = '<div class="q-preview-surface"></div>';
-        window.igfMountQuestionnaire(host.querySelector(".q-preview-surface"), res[1]);
+        window.igfMountQuestionnaire(host.querySelector(".q-preview-surface"), res[1], opts);
       })
       .catch(function (e) {
         host.innerHTML =

@@ -1,6 +1,7 @@
 import type { VNode } from "preact";
 import type { Artifact } from "../model/types.js";
 import { Card, CopyButton, KindBadge, MetaGrid, StatusPill, TagBadges } from "./components.js";
+import { collectAnswerValueSets, resolveLocalOptions } from "./local-valuesets.js";
 import type { RenderCtx } from "./structure-definition.js";
 
 interface QItem {
@@ -101,6 +102,15 @@ export function renderQuestionnaire(a: Artifact, ctx: RenderCtx): VNode {
   const questionCount = countLeaves(items);
   const jsonUrl = `${a.resourceType}-${a.id}.json`;
 
+  // Options for IG-local answerValueSet canonicals, resolved at build time so
+  // the interactive preview never needs an external terminology server for
+  // ValueSets this IG defines itself. Empty for questionnaires without any
+  // (locally resolvable) answerValueSet — then no blob is emitted at all.
+  const localVs = resolveLocalOptions(collectAnswerValueSets(items), ctx.model.artifacts, ctx.expansions);
+  const localVsJson = Object.keys(localVs).length
+    ? JSON.stringify(localVs).replace(/</g, "\\u003c")
+    : undefined;
+
   return (
     <article>
       <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px">
@@ -145,6 +155,13 @@ export function renderQuestionnaire(a: Artifact, ctx: RenderCtx): VNode {
 
         {/* Preview: formbox island, auto-mounted on load */}
         <div data-q-panel="preview">
+          {localVsJson ? (
+            <script
+              type="application/json"
+              id="igf-vs-options"
+              dangerouslySetInnerHTML={{ __html: localVsJson }}
+            />
+          ) : null}
           <div
             class="q-preview"
             data-questionnaire-preview
