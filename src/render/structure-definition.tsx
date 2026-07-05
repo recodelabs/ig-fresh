@@ -1,7 +1,7 @@
 import type { VNode } from "preact";
 import type { Artifact, IgModel } from "../model/types.js";
 import { buildElementTree, flattenTree, type ElementNode } from "../model/element-tree.js";
-import { Card, CopyButton, FlagBadge, KindBadge, MetaGrid, StatusPill } from "./components.js";
+import { Card, CopyButton, FlagBadge, KindBadge, MetaGrid, StatusPill, TagBadges } from "./components.js";
 import type { LinkResolver } from "./links.js";
 
 export interface RenderCtx {
@@ -133,6 +133,7 @@ export function renderStructureDefinition(a: Artifact, ctx: RenderCtx): VNode {
       <div class="flex flex-wrap items-center gap-3" style="display:flex;flex-wrap:wrap;align-items:center;gap:10px">
         <KindBadge kind={a.kind} />
         <StatusPill status={a.status} version={a.version} />
+        <TagBadges tags={a.tags} />
       </div>
       <h1 style="margin-top:10px">{sd.title ?? sd.name ?? a.id}</h1>
       {a.description ? <p class="page-lede">{a.description}</p> : null}

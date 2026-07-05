@@ -1,6 +1,6 @@
 import type { VNode } from "preact";
 import type { Artifact } from "../model/types.js";
-import { Card, CopyButton, KindBadge, MetaGrid, StatusPill } from "./components.js";
+import { Card, CopyButton, KindBadge, MetaGrid, StatusPill, TagBadges } from "./components.js";
 import type { RenderCtx } from "./structure-definition.js";
 
 interface QItem {
@@ -106,6 +106,7 @@ export function renderQuestionnaire(a: Artifact, ctx: RenderCtx): VNode {
       <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px">
         <KindBadge kind={a.kind} />
         <StatusPill status={a.status} version={a.version} />
+        <TagBadges tags={a.tags} />
       </div>
       <h1 style="margin-top:10px">{q.title ?? q.name ?? a.id}</h1>
       {a.description ? <p class="page-lede">{a.description}</p> : null}

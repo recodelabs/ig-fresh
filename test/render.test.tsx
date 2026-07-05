@@ -4,6 +4,8 @@ import { renderPage } from "../src/render/shell.js";
 import { LinkResolver } from "../src/render/links.js";
 import { renderStructureDefinition, type RenderCtx } from "../src/render/structure-definition.js";
 import { renderCodeSystem } from "../src/render/terminology.js";
+import { renderArtifactsIndex } from "../src/render/artifacts-index.js";
+import { render as renderToString } from "preact-render-to-string";
 
 const sd = {
   resourceType: "StructureDefinition",
@@ -41,6 +43,7 @@ const artifact: Artifact = {
   version: "0.1.0",
   status: "draft",
   filename: "StructureDefinition-icr-campaign.html",
+  tags: [],
   json: sd,
 };
 
@@ -113,6 +116,7 @@ describe("renderCodeSystem", () => {
     title: "Codes",
     url: "https://x/CodeSystem/cs1",
     filename: "CodeSystem-cs1.html",
+    tags: [],
     json: {
       resourceType: "CodeSystem",
       id: "cs1",
@@ -136,5 +140,59 @@ describe("renderCodeSystem", () => {
     expect(html).toContain("Beta one");
     expect(html).toContain("Concepts (3)");
     expect(html).toContain('data-filter-text="b1 beta one "');
+  });
+});
+
+describe("renderArtifactsIndex tag filter", () => {
+  const tagged: Artifact = {
+    kind: "example",
+    resourceType: "CarePlan",
+    id: "ex1",
+    name: "Example One",
+    title: "Example One",
+    filename: "CarePlan-ex1.html",
+    tags: [{ code: "espen", label: "ESPEN" }],
+    json: {},
+  };
+  const untagged: Artifact = {
+    kind: "example",
+    resourceType: "CarePlan",
+    id: "ex2",
+    name: "Example Two",
+    title: "Example Two",
+    filename: "CarePlan-ex2.html",
+    tags: [],
+    json: {},
+  };
+
+  it("renders a tag chip row with counts and per-entry data-tags when tags exist", () => {
+    const html = renderToString(
+      renderArtifactsIndex({ ...model, artifacts: [tagged, untagged] }),
+    );
+    // preact serializes the empty-string attribute as a bare attribute; the
+    // client reads getAttribute("data-tag-chip") === "" for the "All" chip.
+    expect(html).toContain('data-tag-chip aria-pressed="true"'); // "All" chip
+    expect(html).toContain('data-tag-chip="espen"');
+    expect(html).toContain("ESPEN");
+    // data-tags is a JSON array of codes ("-escaped in the serialized attribute)
+    expect(html).toContain('data-tags="[&quot;espen&quot;]"');
+    expect(html).toContain("tag-badge");
+    // count reflects only the one tagged example
+    expect(html).toContain(">1<");
+  });
+
+  it("omits data-tags on untagged entries", () => {
+    const html = renderToString(
+      renderArtifactsIndex({ ...model, artifacts: [tagged, untagged] }),
+    );
+    expect(html.match(/data-tags/g)).toHaveLength(1);
+  });
+
+  it("omits the tag chip row entirely when no example is tagged", () => {
+    const html = renderToString(
+      renderArtifactsIndex({ ...model, artifacts: [untagged] }),
+    );
+    expect(html).not.toContain("data-tag-chip");
+    expect(html).not.toContain("tag-badge");
   });
 });

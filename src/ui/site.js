@@ -101,7 +101,8 @@
       rows.forEach(function (row) {
         var hit = !q || row.getAttribute("data-filter-text").indexOf(q) !== -1;
         var kindOk = row.getAttribute("data-kind-hidden") !== "1";
-        if (hit && kindOk) { row.removeAttribute("data-hidden"); shown++; }
+        var tagOk = row.getAttribute("data-tag-hidden") !== "1";
+        if (hit && kindOk && tagOk) { row.removeAttribute("data-hidden"); shown++; }
         else row.setAttribute("data-hidden", "");
       });
       if (counter) counter.textContent = String(shown);
@@ -129,6 +130,32 @@
         if (input && input.apply) input.apply();
         else document.querySelectorAll("[data-filter-text]").forEach(function (row) {
           if (row.getAttribute("data-kind-hidden") === "1") row.setAttribute("data-hidden", "");
+          else row.removeAttribute("data-hidden");
+        });
+      });
+    });
+  }
+
+  // --- project-tag filter chips (artifacts index) --------------------------
+  // Single-select: "All" (data-tag-chip="") clears; a tag chip shows only rows
+  // carrying that tag code. Composes with kind chips + text filter via apply().
+  var tagChips = document.querySelectorAll("[data-tag-chip]");
+  if (tagChips.length) {
+    tagChips.forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        var tag = chip.getAttribute("data-tag-chip");
+        tagChips.forEach(function (c) { c.setAttribute("aria-pressed", String(c === chip)); });
+        document.querySelectorAll("[data-filter-text]").forEach(function (row) {
+          // data-tags is a JSON array of tag codes (codes may contain any character)
+          var rowTags = [];
+          try { rowTags = JSON.parse(row.getAttribute("data-tags") || "[]"); } catch (e) {}
+          var ok = !tag || rowTags.indexOf(tag) !== -1;
+          row.setAttribute("data-tag-hidden", ok ? "0" : "1");
+        });
+        var input = document.querySelector("[data-filter]");
+        if (input && input.apply) input.apply();
+        else document.querySelectorAll("[data-filter-text]").forEach(function (row) {
+          if (row.getAttribute("data-tag-hidden") === "1") row.setAttribute("data-hidden", "");
           else row.removeAttribute("data-hidden");
         });
       });

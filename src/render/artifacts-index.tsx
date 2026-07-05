@@ -1,13 +1,25 @@
 import type { VNode } from "preact";
 import type { Artifact, ArtifactKind, IgModel } from "../model/types.js";
 import { KIND_INFO, KIND_ORDER } from "../model/types.js";
-import { KindBadge } from "./components.js";
+import { KindBadge, TagBadge } from "./components.js";
 
 export function renderArtifactsIndex(model: IgModel): VNode {
   const counts = new Map<ArtifactKind, number>();
   for (const a of model.artifacts) counts.set(a.kind, (counts.get(a.kind) ?? 0) + 1);
   const kinds = KIND_ORDER.filter((k) => counts.get(k));
   const ordered = KIND_ORDER.flatMap((k) => model.artifacts.filter((a) => a.kind === k));
+
+  // Distinct project tags (from meta.tag) across artifacts, with entry counts,
+  // in first-seen order. Drives the optional tag-filter chip row below.
+  const tagCounts = new Map<string, { label: string; count: number }>();
+  for (const a of ordered) {
+    for (const t of a.tags) {
+      const cur = tagCounts.get(t.code);
+      if (cur) cur.count++;
+      else tagCounts.set(t.code, { label: t.label, count: 1 });
+    }
+  }
+  const tags = [...tagCounts.entries()];
 
   return (
     <article data-pagefind-ignore>
@@ -37,16 +49,36 @@ export function renderArtifactsIndex(model: IgModel): VNode {
           </button>
         ))}
       </div>
+      {tags.length ? (
+        <div class="index-controls" role="group" aria-label="Filter by project tag">
+          <button type="button" class="kind-filter" data-tag-chip="" aria-pressed="true">
+            All
+          </button>
+          {tags.map(([code, { label, count }]) => (
+            <button type="button" class="kind-filter" data-tag-chip={code} aria-pressed="false">
+              {label} <span style="opacity:.55">{count}</span>
+            </button>
+          ))}
+        </div>
+      ) : null}
       <div class="artifact-list" id="artifact-list">
         {ordered.map((a) => (
           <a
             class={`artifact-item kind-${a.kind}`}
             href={a.filename}
             data-kind={a.kind}
-            data-filter-text={`${a.name} ${a.title} ${a.id} ${a.description ?? ""}`.toLowerCase()}
+            data-tags={a.tags.length ? JSON.stringify(a.tags.map((t) => t.code)) : undefined}
+            data-filter-text={`${a.name} ${a.title} ${a.id} ${a.description ?? ""} ${a.tags
+              .map((t) => t.label)
+              .join(" ")}`.toLowerCase()}
           >
             <h3>{a.title}</h3>
-            <KindBadge kind={a.kind} />
+            <div class="artifact-badges">
+              {a.tags.map((t) => (
+                <TagBadge label={t.label} />
+              ))}
+              <KindBadge kind={a.kind} />
+            </div>
             {a.description ? <p>{a.description}</p> : null}
           </a>
         ))}

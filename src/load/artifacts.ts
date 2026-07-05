@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { Artifact, ArtifactKind, ResourceRef } from "../model/types.js";
+import type { Artifact, ArtifactKind, ArtifactTag, ResourceRef } from "../model/types.js";
 
 const RT_KIND: Record<string, ArtifactKind> = {
   CodeSystem: "codesystem",
@@ -21,6 +21,26 @@ function classify(json: any, ref: ResourceRef | undefined): ArtifactKind {
     return "profile";
   }
   return RT_KIND[rt] ?? (ref ? "other" : "example");
+}
+
+/** Read project tags from a resource's `meta.tag`; each coding's display (or code) is a label. */
+export function extractTags(json: any): ArtifactTag[] {
+  const tags = json?.meta?.tag;
+  if (!Array.isArray(tags)) return [];
+  const out: ArtifactTag[] = [];
+  const seen = new Set<string>();
+  for (const t of tags) {
+    // truthiness (not just typeof) so empty strings fall through to the fallback
+    const code = typeof t?.code === "string" && t.code ? t.code : undefined;
+    const display = typeof t?.display === "string" && t.display ? t.display : undefined;
+    const label = display ?? code;
+    if (!label) continue;
+    const key = code ?? label;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push({ code: key, label });
+  }
+  return out;
 }
 
 /** Files the publisher emits alongside resources that are not page-worthy artifacts. */
@@ -65,6 +85,7 @@ export function loadArtifacts(
       version: json.version,
       status: json.status,
       filename: `${json.resourceType}-${json.id}.html`,
+      tags: extractTags(json),
       json,
       ref,
     });
