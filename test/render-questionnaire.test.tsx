@@ -93,4 +93,65 @@ describe("renderQuestionnaire", () => {
     // 2 boolean leaves under one group
     expect(html).toMatch(/Questions<\/dt>\s*<dd[^>]*>2</);
   });
+
+  it("emits no local-valueset blob when the questionnaire has no answerValueSet", () => {
+    expect(html).not.toContain("igf-vs-options");
+  });
+});
+
+describe("renderQuestionnaire with IG-local answerValueSet", () => {
+  const vs: Artifact = {
+    kind: "valueset",
+    resourceType: "ValueSet",
+    id: "disease-vs",
+    name: "DiseaseVS",
+    title: "Disease VS",
+    url: "https://x/ValueSet/disease-vs",
+    version: "0.1.0",
+    status: "active",
+    filename: "ValueSet-disease-vs.html",
+    tags: [],
+    json: { resourceType: "ValueSet", id: "disease-vs", url: "https://x/ValueSet/disease-vs" },
+  };
+  const qvs: Artifact = {
+    ...q,
+    json: {
+      ...q.json,
+      item: [
+        { linkId: "p_disease", text: "Disease", type: "choice", answerValueSet: "https://x/ValueSet/disease-vs" },
+        { linkId: "p_other", text: "Other", type: "choice", answerValueSet: "http://hl7.org/fhir/ValueSet/administrative-gender" },
+      ],
+    },
+  };
+  const vsModel: IgModel = { ...model, artifacts: [qvs, vs] };
+  const vsCtx: RenderCtx = {
+    model: vsModel,
+    links: new LinkResolver([qvs, vs]),
+    expansions: new Map([
+      [
+        "https://x/ValueSet/disease-vs",
+        [{ system: "https://x/cs", code: "lf", display: "Lymphatic filariasis" }],
+      ],
+    ]),
+    examplesOf: [],
+  };
+  const html = renderPage(vsModel, {
+    filename: qvs.filename,
+    title: qvs.title,
+    breadcrumbs: [],
+    body: renderQuestionnaire(qvs, vsCtx),
+    activeKind: "questionnaire",
+  });
+
+  it("emits a JSON blob with the locally resolved options", () => {
+    expect(html).toContain('id="igf-vs-options"');
+    expect(html).toContain("Lymphatic filariasis");
+    expect(html).toContain('"code":"lf"');
+  });
+
+  it("keeps non-local canonicals out of the blob", () => {
+    const blob = html.match(/<script type="application\/json" id="igf-vs-options">(.*?)<\/script>/s)?.[1];
+    expect(blob).toBeTruthy();
+    expect(blob).not.toContain("administrative-gender");
+  });
 });

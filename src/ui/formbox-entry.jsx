@@ -9,14 +9,25 @@ import Renderer from "@formbox/renderer";
 import { theme as formboxTheme } from "@formbox/mantine-theme";
 import "@mantine/core/styles.css";
 import "@formbox/mantine-theme/style.css";
+import { applyLocalValueSets } from "./apply-local-valuesets.js";
 
 /**
  * Mount an interactive questionnaire preview.
  * @param {HTMLElement} el       container element
  * @param {object} questionnaire FHIR R4 Questionnaire resource
- * @param {object} [opts]        { terminologyServerUrl?: string }
+ * @param {object} [opts]        { terminologyServerUrl?: string, localValueSets?: object }
  */
 function mount(el, questionnaire, opts = {}) {
+  // Rewrite IG-local answerValueSet references into inline answerOption before
+  // the renderer sees them — its only other path is a terminology server,
+  // which cannot expand ValueSets that exist only in this IG.
+  if (opts.localValueSets) {
+    try {
+      questionnaire = applyLocalValueSets(questionnaire, opts.localValueSets);
+    } catch (e) {
+      // fall through with the original questionnaire — preview still renders
+    }
+  }
   const props = {
     questionnaire,
     fhirVersion: "r4",
