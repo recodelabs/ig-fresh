@@ -63,11 +63,21 @@ export interface Artifact {
   ref?: ResourceRef;
 }
 
+/**
+ * Maps a logical runtime-asset name (e.g. `"site.js"`) to its emitted,
+ * content-fingerprinted href relative to a page (e.g. `"igf/site.a1b2c3d4.js"`).
+ * Produced by the site build; absent in unit tests, where the shell falls back
+ * to the stable un-hashed `igf/<name>` paths.
+ */
+export type AssetManifest = Record<string, string>;
+
 export interface IgModel {
   meta: IgMeta;
   pages: PageNode[];
   artifacts: Artifact[];
   menu: { label: string; href: string }[];
+  /** Content-fingerprinted runtime asset hrefs, set by the site build. */
+  assets?: AssetManifest;
 }
 
 /** Display metadata for each artifact kind, in canonical display order. */

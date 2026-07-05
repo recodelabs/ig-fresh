@@ -16,6 +16,8 @@ import { renderInstance } from "../render/instance.js";
 import { renderQuestionnaire } from "../render/questionnaire.js";
 import { renderArtifactsIndex } from "../render/artifacts-index.js";
 import { renderNarrative, renderSearchPage } from "../render/page.js";
+import { contentHash, fingerprintName } from "./fingerprint.js";
+import type { AssetManifest } from "../model/types.js";
 
 const PKG_ROOT = fileURLToPath(new URL("../..", import.meta.url));
 const MAX_HIGHLIGHT_BYTES = 220_000;
@@ -80,7 +82,7 @@ export async function buildSite(
   log(`• copied ${copied} publisher files through`);
 
   // ---- assets ----------------------------------------------------------------
-  copyAssets(outDir);
+  model.assets = copyAssets(outDir);
 
   // ---- shiki -----------------------------------------------------------------
   const highlighter = await createHighlighter({
@@ -257,21 +259,49 @@ function highlightJson(highlighter: Highlighter, a: Artifact, warn: (m: string) 
   }
 }
 
-function copyAssets(outDir: string) {
+/**
+ * Emit the runtime assets into `igf/` and return an {@link AssetManifest}.
+ *
+ * The JS/CSS bundles are written at **content-fingerprinted** paths
+ * (`igf/<name>.<hash>.<ext>`) rather than stable ones. The hosting serves these
+ * with a long `max-age`, so before this change a fresh deploy could be masked by
+ * a browser/edge cache still holding the previous bundle for hours. A content
+ * hash makes every changed asset a brand-new URL, so a deploy is visible
+ * instantly and an unchanged asset stays cacheable. Nothing is emitted at the
+ * old un-hashed paths — stale HTML references old hashed names (also absent),
+ * which is fine because HTML is served `max-age=0`.
+ *
+ * Deliberately NOT fingerprinted:
+ * - **fonts** — referenced by relative `url()` from the fingerprinted CSS (they
+ *   resolve from the same `igf/` dir regardless of the CSS filename) and change
+ *   very rarely, so the caching win is negligible and not worth rewriting CSS.
+ * - **fuse.min.mjs** — a vendored, version-pinned lib, imported by `palette.js`
+ *   relative to its own module URL.
+ * - **palette-index.json** — regenerated every build and fetched by name.
+ */
+function copyAssets(outDir: string): AssetManifest {
   const igf = path.join(outDir, "igf");
   const fonts = path.join(igf, "fonts");
   fs.mkdirSync(fonts, { recursive: true });
 
-  const cssSrc = path.join(PKG_ROOT, "dist", "ui", "site.built.css");
-  fs.copyFileSync(cssSrc, path.join(igf, "site.css"));
-  for (const f of ["site.js", "palette.js"]) {
-    fs.copyFileSync(path.join(PKG_ROOT, "dist", "ui", f), path.join(igf, f));
+  const manifest: AssetManifest = {};
+  // [emitted logical name, source file]. Formbox is optional (only present when
+  // the questionnaire-preview bundle has been built).
+  const runtime: [string, string][] = [
+    ["site.css", path.join(PKG_ROOT, "dist", "ui", "site.built.css")],
+    ["site.js", path.join(PKG_ROOT, "dist", "ui", "site.js")],
+    ["palette.js", path.join(PKG_ROOT, "dist", "ui", "palette.js")],
+    ["formbox.js", path.join(PKG_ROOT, "dist", "ui", "formbox.js")],
+    ["formbox.css", path.join(PKG_ROOT, "dist", "ui", "formbox.css")],
+  ];
+  for (const [name, src] of runtime) {
+    if (!fs.existsSync(src)) continue;
+    const buf = fs.readFileSync(src);
+    const hashed = fingerprintName(name, contentHash(buf));
+    fs.writeFileSync(path.join(igf, hashed), buf);
+    manifest[name] = `igf/${hashed}`;
   }
-  // Formbox questionnaire-preview island (lazy-loaded on questionnaire pages).
-  for (const f of ["formbox.js", "formbox.css"]) {
-    const src = path.join(PKG_ROOT, "dist", "ui", f);
-    if (fs.existsSync(src)) fs.copyFileSync(src, path.join(igf, f));
-  }
+
   fs.copyFileSync(
     path.join(PKG_ROOT, "node_modules", "fuse.js", "dist", "fuse.min.mjs"),
     path.join(igf, "fuse.min.mjs"),
@@ -284,4 +314,6 @@ function copyAssets(outDir: string) {
   for (const [pkg, file] of fontFiles) {
     fs.copyFileSync(path.join(PKG_ROOT, "node_modules", pkg, "files", file), path.join(fonts, file));
   }
+
+  return manifest;
 }
