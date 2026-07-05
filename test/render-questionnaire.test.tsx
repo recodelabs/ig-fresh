@@ -154,4 +154,31 @@ describe("renderQuestionnaire with IG-local answerValueSet", () => {
     expect(blob).toBeTruthy();
     expect(blob).not.toContain("administrative-gender");
   });
+
+  it("escapes </script> in concept displays so the blob cannot break out of its script tag", () => {
+    const hostileCtx: RenderCtx = {
+      ...vsCtx,
+      expansions: new Map([
+        [
+          "https://x/ValueSet/disease-vs",
+          [{ system: "https://x/cs", code: "evil", display: "</script><img onerror=x>" }],
+        ],
+      ]),
+    };
+    const hostileHtml = renderPage(vsModel, {
+      filename: qvs.filename,
+      title: qvs.title,
+      breadcrumbs: [],
+      body: renderQuestionnaire(qvs, hostileCtx),
+      activeKind: "questionnaire",
+    });
+    const blob = hostileHtml.match(/<script type="application\/json" id="igf-vs-options">(.*?)<\/script>/s)?.[1];
+    expect(blob).toBeTruthy();
+    // no literal close-tag or element open inside the JSON payload…
+    expect(blob).not.toContain("</script");
+    expect(blob).not.toContain("<img");
+    // …but the original display round-trips through JSON.parse
+    const parsed = JSON.parse(blob!);
+    expect(parsed["https://x/ValueSet/disease-vs"][0].display).toBe("</script><img onerror=x>");
+  });
 });

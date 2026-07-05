@@ -93,12 +93,9 @@ export function resolveLocalOptions(
     if (!artifact) continue; // not IG-local → leave to the terminology server
     if (version && artifact.version && artifact.version !== version) continue; // version mismatch → not ours
 
-    const concepts =
-      (expansions.get(url) ?? []).length > 0
-        ? expansions.get(url)!
-        : conceptsFromExpansion(artifact.json).length > 0
-          ? conceptsFromExpansion(artifact.json)
-          : conceptsFromCompose(artifact.json);
+    let concepts = expansions.get(url) ?? [];
+    if (concepts.length === 0) concepts = conceptsFromExpansion(artifact.json);
+    if (concepts.length === 0) concepts = conceptsFromCompose(artifact.json);
     if (concepts.length > 0) out[canonical] = concepts;
   }
   return out;

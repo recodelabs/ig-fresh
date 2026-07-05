@@ -27,7 +27,9 @@ export function loadExpansions(
     if (!Array.isArray(contains)) return;
     map.set(
       vs.url,
-      contains.map((c: any) => ({ system: c.system ?? "", code: c.code ?? "", display: c.display })),
+      contains
+        .filter((c: any) => c && typeof c.code === "string" && c.abstract !== true)
+        .map((c: any) => ({ system: c.system ?? "", code: c.code, display: c.display })),
     );
   };
 

@@ -21,13 +21,20 @@ describe("loadExpansions", () => {
             resource: {
               resourceType: "ValueSet",
               url: "http://x/ValueSet/a",
-              expansion: { contains: [{ system: "http://s", code: "c1", display: "C one" }] },
+              expansion: {
+                contains: [
+                  { system: "http://s", code: "c1", display: "C one" },
+                  { system: "http://s", code: "grp", display: "Grouper", abstract: true },
+                  { system: "http://s", display: "No code" },
+                ],
+              },
             },
           },
         ],
       }),
     );
     const m = loadExpansions(dir);
+    // abstract and code-less entries are not selectable options — filtered out
     expect(m.get("http://x/ValueSet/a")).toEqual([
       { system: "http://s", code: "c1", display: "C one" },
     ]);
