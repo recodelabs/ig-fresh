@@ -466,6 +466,21 @@ h1,
   padding: 2px 10px;
   background: var(--bg-raised);
 }
+.tag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  border-radius: 99px;
+  padding: 2px 9px 2px 7px;
+}
+.tag-badge svg {
+  opacity: 0.85;
+}
 .flag-badge {
   display: inline-grid;
   place-items: center;
@@ -831,6 +846,13 @@ h1,
 }
 .artifact-item[data-hidden] {
   display: none;
+}
+.artifact-badges {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
 }
 .artifact-item h3 {
   margin: 0;

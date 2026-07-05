@@ -40,6 +40,12 @@ export interface ResourceRef {
   profiles: string[]; // canonical URLs this instance exemplifies
 }
 
+/** A project/source tag derived from an artifact's FHIR `meta.tag` coding. */
+export interface ArtifactTag {
+  code: string; // the coding.code (stable identifier used for filtering)
+  label: string; // coding.display, falling back to code
+}
+
 export interface Artifact {
   kind: ArtifactKind;
   resourceType: string;
@@ -51,6 +57,8 @@ export interface Artifact {
   version?: string;
   status?: string;
   filename: string; // "StructureDefinition-icr-campaign.html"
+  /** Project tags read from `meta.tag` (empty when none). */
+  tags: ArtifactTag[];
   json: any;
   ref?: ResourceRef;
 }

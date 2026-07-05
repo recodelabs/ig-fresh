@@ -4,6 +4,13 @@
  "meta": {
   "profile": [
    "https://fhir.icr.unicef.org/StructureDefinition/ICRCampaign"
+  ],
+  "tag": [
+   {
+    "system": "https://fhir.icr.unicef.org/CodeSystem/icr-project-tag-cs",
+    "code": "espen",
+    "display": "ESPEN"
+   }
   ]
  },
  "extension": [

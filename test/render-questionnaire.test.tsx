@@ -16,6 +16,7 @@ const q: Artifact = {
   version: "0.1.0",
   status: "active",
   filename: "Questionnaire-icr-mda-supervision-checklist.html",
+  tags: [],
   json: {
     resourceType: "Questionnaire",
     id: "icr-mda-supervision-checklist",

@@ -42,6 +42,30 @@ export function StatusPill({ status, version }: { status?: string; version?: str
   );
 }
 
+/** A small project-tag pill (from `meta.tag`), used in listings and artifact headers. */
+export function TagBadge({ label }: { label: string }) {
+  return (
+    <span class="tag-badge" title={`Project tag: ${label}`}>
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" />
+        <circle cx="7.5" cy="7.5" r="0.5" fill="currentColor" />
+      </svg>
+      {label}
+    </span>
+  );
+}
+
+/** Render a run of project-tag pills for an artifact's tags (nothing when empty). */
+export function TagBadges({ tags }: { tags: { label: string }[] }) {
+  return (
+    <>
+      {tags.map((t) => (
+        <TagBadge label={t.label} />
+      ))}
+    </>
+  );
+}
+
 export function FlagBadge({ flag, title }: { flag: string; title: string }) {
   return (
     <span class={`flag-badge flag-${flag}`} title={title} aria-label={title}>

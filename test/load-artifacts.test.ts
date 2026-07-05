@@ -44,6 +44,14 @@ describe("loadArtifacts", () => {
     expect(byId["CarePlan/example-mr-sia-2026"].title).toBe("MR SIA 2026 example");
   });
 
+  it("reads project tags from meta.tag (display over code) and none elsewhere", () => {
+    expect(byId["CarePlan/example-mr-sia-2026"].tags).toEqual([
+      { code: "espen", label: "ESPEN" },
+    ]);
+    expect(byId["StructureDefinition/ICRCampaignTask"].tags).toEqual([]);
+    expect(byId["CodeSystem/icr-campaign-type-cs"].tags).toEqual([]);
+  });
+
   it("skips .canonical.json, non-resources, and junk files", () => {
     const ids = artifacts.map((a) => a.id);
     expect(ids.filter((i) => i === "ICRCampaignTask")).toHaveLength(1);
