@@ -9,6 +9,21 @@ receive minor/patch improvements automatically; breaking changes land only in a 
 
 ### Added
 
+- **Content-hash fingerprints for runtime assets (instant cache busting)** — the JS/CSS
+  bundles (`site.js`, `palette.js`, `formbox.js`, `site.css`, `formbox.css`) are now emitted
+  at content-fingerprinted paths (`igf/<name>.<hash>.<ext>`, first 8 hex of SHA-256) instead
+  of stable ones, and every reference is rewritten accordingly: the `<script>`/`<link>` tags
+  in each page, and the lazy `formbox` loader inside `site.js` (which reads the hashed URLs
+  from `data-formbox-js`/`data-formbox-css` on its own script tag, so `site.js` stays
+  byte-stable across deploys). Because the hosting serves `igf/*` with a long `max-age`, a
+  fresh deploy could previously be masked for hours by a browser or edge cache still holding
+  the old bundle behind new HTML (HTML is `max-age=0`); a changed asset is now a brand-new
+  URL no cache has seen, so deploys are visible immediately and unchanged assets stay fully
+  cacheable. Nothing is emitted at the old un-hashed paths. Fonts, the vendored `fuse.min.mjs`,
+  and `palette-index.json` are intentionally left un-fingerprinted (change rarely / regenerated
+  by name / resolved by relative `url()` from the same directory). Deterministic and fully
+  generic — no IG-specific behavior.
+
 - **Project-tag filter for the artifacts gallery** — artifacts' FHIR `meta.tag` codings
   (display, falling back to code) are read as project tags. The artifacts index gains an
   "All" + per-tag chip row with counts (shown only when at least one artifact is tagged)

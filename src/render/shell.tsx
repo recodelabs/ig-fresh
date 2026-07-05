@@ -17,6 +17,15 @@ export interface PageOpts {
   activeKind?: ArtifactKind;
 }
 
+/**
+ * Resolve a runtime asset to its emitted href. Uses the content-fingerprinted
+ * path from the build manifest when present, else the stable `igf/<name>`
+ * fallback (unit tests, and any consumer that skips fingerprinting).
+ */
+function asset(model: IgModel, name: string): string {
+  return model.assets?.[name] ?? `igf/${name}`;
+}
+
 function groupArtifacts(artifacts: Artifact[]): Map<ArtifactKind, Artifact[]> {
   const groups = new Map<ArtifactKind, Artifact[]>();
   for (const kind of KIND_ORDER) groups.set(kind, []);
@@ -165,7 +174,7 @@ export function renderPage(model: IgModel, opts: PageOpts): string {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{`${opts.title} — ${model.meta.title}`}</title>
         <meta name="generator" content="ig-topcoat" />
-        <link rel="stylesheet" href="igf/site.css" />
+        <link rel="stylesheet" href={asset(model, "site.css")} />
         <script
           // set theme before first paint to avoid flash
           dangerouslySetInnerHTML={{
@@ -223,8 +232,17 @@ export function renderPage(model: IgModel, opts: PageOpts): string {
             </div>
           </div>
         </div>
-        <script src="igf/site.js" defer />
-        <script src="igf/palette.js" defer />
+        {/* site.js lazy-loads the formbox preview island on questionnaire pages.
+            The hashed formbox URLs are passed via data-attributes so site.js
+            stays content-stable (its own hash changes only when its source does)
+            instead of hard-coding a fingerprint that would shift every build. */}
+        <script
+          src={asset(model, "site.js")}
+          data-formbox-js={asset(model, "formbox.js")}
+          data-formbox-css={asset(model, "formbox.css")}
+          defer
+        />
+        <script src={asset(model, "palette.js")} defer />
       </body>
     </html>
   );

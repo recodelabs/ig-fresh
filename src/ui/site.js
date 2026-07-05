@@ -175,6 +175,18 @@
     });
   });
 
+  // Content-fingerprinted URLs for the lazily-loaded formbox island are emitted
+  // by the page onto the site.js <script> tag (data-formbox-js / data-formbox-css)
+  // so this file never hard-codes a hash and stays byte-stable across deploys.
+  // Falls back to the stable un-hashed paths if the attributes are absent.
+  function formboxAssets() {
+    var el = document.querySelector("script[data-formbox-js]");
+    return {
+      js: (el && el.getAttribute("data-formbox-js")) || "igf/formbox.js",
+      css: (el && el.getAttribute("data-formbox-css")) || "igf/formbox.css",
+    };
+  }
+
   var formboxLoading = false;
   function loadFormbox() {
     return new Promise(function (resolve, reject) {
@@ -186,12 +198,13 @@
         return;
       }
       formboxLoading = true;
+      var urls = formboxAssets();
       var css = document.createElement("link");
       css.rel = "stylesheet";
-      css.href = "igf/formbox.css";
+      css.href = urls.css;
       document.head.appendChild(css);
       var s = document.createElement("script");
-      s.src = "igf/formbox.js";
+      s.src = urls.js;
       s.onload = function () { resolve(); };
       s.onerror = function () { reject(new Error("Failed to load form renderer")); };
       document.body.appendChild(s);
