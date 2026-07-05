@@ -1080,6 +1080,39 @@ h1,
   font-size: 12.5px;
 }
 .prose pre code { background: none; border: none; padding: 0; }
+/* Mermaid diagram blocks. Before JS runs (or if it never does), the block shows
+   its raw source in the muted monospace box shared with other <pre>. Once the
+   mermaid island renders, the element holds an <svg> instead — we drop the box
+   chrome and center it, letting wide diagrams scroll horizontally. */
+.mermaid,
+.prose .mermaid {
+  display: block;
+  margin: 1.4em 0;
+  text-align: center;
+  max-width: 100%;
+  overflow-x: auto;
+}
+/* Once rendered to SVG: shed the source-box look. */
+.prose pre.mermaid[data-processed] {
+  background: none;
+  border: none;
+  padding: 0;
+  white-space: normal;
+}
+.prose pre.mermaid[data-processed] svg {
+  max-width: 100%;
+  height: auto;
+}
+.mermaid-error {
+  border-color: var(--border);
+}
+.mermaid-error-note {
+  margin-top: 8px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  font-family: var(--font-body, system-ui, sans-serif);
+  text-align: center;
+}
 .prose blockquote {
   border-left: 3px solid var(--accent);
   margin: 1em 0;
