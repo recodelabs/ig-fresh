@@ -26,8 +26,10 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version: "20"
-        cache: "npm"
-        cache-dependency-path: ${{ github.action_path }}/package-lock.json
+        # No npm cache: setup-node's cache-dependency-path cannot glob outside
+        # GITHUB_WORKSPACE, and a composite action's files live under _actions/ —
+        # pointing it at github.action_path fails the whole step with
+        # "Some specified paths were not resolved, unable to cache dependencies".
 
     - name: Build ig-topcoat
       shell: bash
