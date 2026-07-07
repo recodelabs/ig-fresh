@@ -9,6 +9,20 @@ receive minor/patch improvements automatically; breaking changes land only in a 
 
 ### Added
 
+- **Canonical-URL redirects (Cloudflare Pages `_redirects`)** — the build now emits a
+  `_redirects` file at the site root with one exact-match 301 per artifact,
+  `/{ResourceType}/{id}` → `/{ResourceType}-{id}.html` (e.g.
+  `/CodeSystem/icr-mda-medicine-package-cs` → `/CodeSystem-icr-mda-medicine-package-cs.html`).
+  FHIR resources link to a resource's **canonical** (`{base}/{ResourceType}/{id}`), which is
+  its identity — not a page. IG Publisher writes the human page at a flat
+  `{ResourceType}-{id}.html`, so a reader who follows a canonical on an IG served at its
+  canonical base hit a non-existent path; Pages then served the `index.html` fallback, and
+  because the shell's asset links are relative that fallback also rendered unstyled (looked
+  like "broken CSS"). Rules are exact-match only (no wildcards, so none can target a missing
+  file), cover examples and literal `Type/id` references too, and are sorted for a
+  byte-deterministic file across rebuilds. New pure helper `buildRedirects` in
+  `src/build/redirects.ts`.
+
 - **Mermaid diagram rendering in narrative pages (client-side, lazy, themed)** — a
   ` ```mermaid ` fence authored in an IG's `pagecontent/*.md` (which IG Publisher emits as
   `<pre class="language-mermaid"><code…>SOURCE</code></pre>` and topcoat previously left
