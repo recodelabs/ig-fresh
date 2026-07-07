@@ -17,6 +17,7 @@ import { renderQuestionnaire } from "../render/questionnaire.js";
 import { renderArtifactsIndex } from "../render/artifacts-index.js";
 import { renderNarrative, renderSearchPage } from "../render/page.js";
 import { contentHash, fingerprintName } from "./fingerprint.js";
+import { buildRedirects } from "./redirects.js";
 import type { AssetManifest } from "../model/types.js";
 
 const PKG_ROOT = fileURLToPath(new URL("../..", import.meta.url));
@@ -220,6 +221,15 @@ export async function buildSite(
     { title: "Artifacts", id: "artifacts.html", kind: "page", href: "artifacts.html", desc: "All artifacts defined in this guide" },
   ];
   fs.writeFileSync(path.join(outDir, "igf", "palette-index.json"), JSON.stringify({ items }));
+
+  // ---- canonical-URL redirects (Cloudflare Pages `_redirects`) ------------------------------
+  // FHIR resources link to canonicals `/{ResourceType}/{id}`, but IG Publisher writes flat
+  // `{ResourceType}-{id}.html` pages; without these 301s a reader following a canonical hits a
+  // non-existent path (served, on Pages, as an unstyled index.html fallback). See redirects.ts.
+  const redirects = buildRedirects(artifacts);
+  fs.writeFileSync(path.join(outDir, "_redirects"), redirects);
+  const redirectRules = redirects ? redirects.trimEnd().split("\n").length : 0;
+  log(`• wrote _redirects (${redirectRules} canonical→page rules)`);
 
   // ---- pagefind ---------------------------------------------------------------------------
   try {
